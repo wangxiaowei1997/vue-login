@@ -9,6 +9,7 @@ import './style/theme.css'
 import './style/characters.css'
 import VueResource from 'vue-resource'
 import store from './store/index'
+import './axios/axios'
 
 Vue.config.productionTip = false
 

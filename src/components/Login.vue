@@ -49,14 +49,35 @@ export default {
         this.$message.error('请输入密码')
       }
       let data = {'username':this.userName,'password':this.password}
-      this.$http.post('/centos/login',data).then((res)=>{console.log(res)
+      // this.$http.post('/centos/login',data).then((res)=>{console.log(res)
+      //    let data = res.data;
+      //    if(data.code ==='200'){
+      //      console.log('卢本伟牛逼')
+      //      let token = data.data.Token
+      //      this.$store.commit("changeLogin",{Authorization:token})
+      //      console.log(this.$store.state)
+      //      this.$router.push('/main')
+      //
+      //
+      //    }
+      // })
+
+      this.$axios.post('/centos/login'
+        ,data
+        ,{headers:{
+           // 'Token':this.$store.state.Authorization,
+           'Content-Type':'application/json'
+        }}
+        )
+        .then((res)=>{
+         console.log(res.data)
          let data = res.data;
          if(data.code ==='200'){
            console.log('卢本伟牛逼')
            let token = data.data.Token
            this.$store.commit("changeLogin",{Authorization:token})
+           console.log(this.$store.state)
            this.$router.push('/main')
-
 
          }
       })
