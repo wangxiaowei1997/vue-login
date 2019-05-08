@@ -56,7 +56,7 @@
         <el-table-column
           label="编辑">
           <template slot-scope="scope">
-            <el-button type="text" @click="dialogCreate(scope.row.book_id)" class="el-icon-edit"></el-button>
+            <el-button type="text" @click="dialogCreate(scope.row)" class="el-icon-edit"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -64,7 +64,7 @@
       <el-dialog title="编辑" :visible.sync="dialogFormVisible">
         <el-form :model="form">
           <el-form-item label="编号" :label-width="formLabelWidth">
-            <el-input v-model="form.book_id" autocomplete="off" readonly="true"></el-input>
+            <el-input v-model="form.book_id" autocomplete="off" readonly="readonly"></el-input>
           </el-form-item>
           <el-form-item label="书名" :label-width="formLabelWidth">
             <el-input v-model="form.book_name" autocomplete="off"></el-input>
@@ -78,7 +78,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取 消</el-button>
-          <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+          <el-button type="primary" @click="editTableListDetails(form)">确 定</el-button>
         </div>
       </el-dialog>
 
@@ -123,10 +123,34 @@ export default {
           this.tableData = res.data
         })
     },
-    dialogCreate(index){
+    dialogCreate(data){
       this.dialogFormVisible = true
-      console.log(index)
-      this.form.book_id=index
+      console.log(data)
+      this.form.book_id=data.book_id
+      this.form.book_name = data.book_name
+      this.form.book_price = data.book_price
+      this.form.date =data.date
+    },
+    editTableListDetails(form){
+      this.dialogFormVisible = false
+      console.log(form)
+      let data = {
+        book_id:form.book_id,
+        book_name:form.book_name,
+        book_price:form.book_price,
+        date:form.date
+      }
+
+      this.$axios.post('/centos/book/update'
+        , {
+          headers: {
+            'Token': this.$store.state.Authorization,
+            'Content-Type': 'application/json'
+          }
+        }, data
+      ).then((res) => {
+        console.log(res.data)
+      })
     }
 
   },
